@@ -5,16 +5,28 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Robot.h"
-
-#include <iostream>
 
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/commands/Scheduler.h>
+
+#include "OI.h"
+#include "SwerveWheel.h"
+#include "FOSwerveDrive.h"
+#include "ROSwerveDrive.h"
+#include "HallTest.h"
+#include "Robot.h"
+
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+  
+  Robot::FOSwerveBase = FOSwerveDrive();
+  Robot::ROSwerveBase = ROSwerveDrive();
+  Robot::HallTestBase = HallTest();
+  Robot::OperatorInterface = OI();
+  
 }
 
 /**
@@ -25,7 +37,9 @@ void Robot::RobotInit() {
  * <p> This runs after the mode specific periodic functions, but before
  * LiveWindow and SmartDashboard integrated updating.
  */
-void Robot::RobotPeriodic() {}
+void Robot::RobotPeriodic() {
+  frc::Scheduler::GetInstance()->Run();
+}
 
 /**
  * This autonomous (along with the chooser code above) shows how to select
@@ -42,7 +56,7 @@ void Robot::AutonomousInit() {
   m_autoSelected = m_chooser.GetSelected();
   // m_autoSelected = SmartDashboard::GetString(
   //     "Auto Selector", kAutoNameDefault);
-  std::cout << "Auto selected: " << m_autoSelected << std::endl;
+  //std::cout << "Auto selected: " << m_autoSelected << std::endl;
 
   if (m_autoSelected == kAutoNameCustom) {
     // Custom Auto goes here
@@ -52,6 +66,7 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::AutonomousPeriodic() {
+  frc::Scheduler::GetInstance()->Run();
   if (m_autoSelected == kAutoNameCustom) {
     // Custom Auto goes here
   } else {
@@ -59,9 +74,16 @@ void Robot::AutonomousPeriodic() {
   }
 }
 
-void Robot::TeleopInit() {}
+void Robot::TeleopInit() {
+    
+}
 
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+
+  //(*mySwerve). driveSwerve(OperatorInterface->getDriverJoystick());
+  frc::Scheduler::GetInstance()->Run();
+
+}
 
 void Robot::TestPeriodic() {}
 

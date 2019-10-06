@@ -6,22 +6,18 @@
 /*----------------------------------------------------------------------------*/
 
 #pragma once
-
-#include <frc/commands/Subsystem.h>
 #include <frc/XboxController.h>
+#include <frc/commands/Command.h>
 
-class OI : public frc::Subsystem {
- private:
-  frc::XboxController *driverJoystick;
-  frc::XboxController *operatorJoystick;
-  // It's desirable that everything possible under private except
-  // for methods that implement subsystem capabilities
-
+class driveSwerve : public frc::Command {
  public:
-  OI();
-  frc::XboxController *getDriverJoystick(){
-    
-    return driverJoystick;
-  }
-  void InitDefaultCommand() override;
+  driveSwerve();
+  void Initialize() override;
+  void Execute() override;
+  bool IsFinished() override;
+  void End() override;
+  void Interrupted() override;
+
+private:
+    frc::XboxController *driverJoystick;
 };

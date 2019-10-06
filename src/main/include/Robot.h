@@ -8,12 +8,25 @@
 #pragma once
 
 #include <string>
+#include "FOSwerveDrive.h"
+#include "ROSwerveDrive.h"
+#include "HallTest.h"
+#include "OI.h"
 
-#include <frc/IterativeRobot.h>
+#include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
 
-class Robot : public frc::IterativeRobot {
+
+
+class Robot : public frc::TimedRobot {
  public:
+
+  static FOSwerveDrive FOSwerveBase;
+  static ROSwerveDrive ROSwerveBase;
+  static HallTest HallTestBase;
+  
+  static OI OperatorInterface;
+
   void RobotInit() override;
   void RobotPeriodic() override;
   void AutonomousInit() override;
@@ -22,9 +35,12 @@ class Robot : public frc::IterativeRobot {
   void TeleopPeriodic() override;
   void TestPeriodic() override;
 
+
  private:
   frc::SendableChooser<std::string> m_chooser;
   const std::string kAutoNameDefault = "Default";
   const std::string kAutoNameCustom = "My Auto";
   std::string m_autoSelected;
+
+  
 };
