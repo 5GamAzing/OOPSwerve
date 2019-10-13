@@ -19,9 +19,9 @@ driveSwerve::driveSwerve() {
   // Use Requires() here to declare subsystem dependencies
   // eg. Requires(Robot::chassis.get());
   
-  Requires(&Robot::FOSwerveBase);
-  Requires(&Robot::ROSwerveBase);
-  Requires(&Robot::HallTestBase);
+  Requires(Robot::FOSwerveBase.get());
+  Requires(Robot::ROSwerveBase.get());
+  Requires(Robot::HallTestBase.get());
 }
 
 // Called just before this Command runs the first time

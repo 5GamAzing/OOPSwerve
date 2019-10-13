@@ -196,4 +196,6 @@ class FOSwerveDrive : public frc::Subsystem {
   }
     
   void InitDefaultCommand() override;
+
+  FOSwerveDrive* get() { return this; }
 };

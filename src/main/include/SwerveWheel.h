@@ -47,13 +47,13 @@ class SwerveWheel : public frc::Subsystem {
     */
   
 
-    while((lowTolerance < encoderValue) && (encoderValue < highTolerance)){ //Shouldn't these be if instead of while?
+    if ((lowTolerance < encoderValue) && (encoderValue < highTolerance)){ //Shouldn't these be if instead of while?
       swivelMotor->Set(0);
     }
-    while(encoderValue<lowTolerance){
+    if (encoderValue<lowTolerance){
       swivelMotor->Set(speed);
     }
-    while(encoderValue > highTolerance){
+    if (encoderValue > highTolerance){
       swivelMotor->Set(-speed);
     }
 

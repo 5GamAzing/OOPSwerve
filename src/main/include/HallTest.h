@@ -55,4 +55,6 @@ class HallTest : public frc::Subsystem {
 }
     
   void InitDefaultCommand() override;
+  
+  HallTest* get() { return this; }
 };

@@ -83,4 +83,6 @@ class ROSwerveDrive : public frc::Subsystem {
   }
     
   void InitDefaultCommand() override;
+
+  ROSwerveDrive* get() { return this; }
 };
