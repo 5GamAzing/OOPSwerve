@@ -5,12 +5,12 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "ROSwerveDrive.h"
-#include "SwerveWheel.h"
+#include "Subsystems/FOSwerveDrive.h"
+#include "Subsystems/SwerveWheel.h"
 
 
 
-ROSwerveDrive::ROSwerveDrive()  : Subsystem("ROSwerveDrive") {
+FOSwerveDrive::FOSwerveDrive()  : Subsystem("FOSwerveDrive") {
 
   frontLeft = new SwerveWheel(0);
   frontRight = new SwerveWheel(1);
@@ -23,7 +23,7 @@ ROSwerveDrive::ROSwerveDrive()  : Subsystem("ROSwerveDrive") {
 
 }
 
-void ROSwerveDrive::InitDefaultCommand() {
+void FOSwerveDrive::InitDefaultCommand() {
   // Set the default command for a subsystem here.
   // SetDefaultCommand(new MySpecialCommand());
 }

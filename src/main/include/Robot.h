@@ -8,9 +8,9 @@
 #pragma once
 
 #include <string>
-#include "FOSwerveDrive.h"
-#include "ROSwerveDrive.h"
-#include "HallTest.h"
+#include "Subsystems/FOSwerveDrive.h"
+#include "Subsystems/ROSwerveDrive.h"
+#include "Subsystems/HallTest.h"
 #include "OI.h"
 
 #include <frc/TimedRobot.h>
@@ -21,11 +21,15 @@
 class Robot : public frc::TimedRobot {
  public:
 
-  static FOSwerveDrive FOSwerveBase;
+  /*static FOSwerveDrive FOSwerveBase;
   static ROSwerveDrive ROSwerveBase;
-  static HallTest HallTestBase;
+  static HallTest HallTestBase;*/
+  static std::shared_ptr<FOSwerveDrive> FOSwerveBase;
+  static std::shared_ptr<ROSwerveDrive> ROSwerveBase;
+  static std::shared_ptr<HallTest> HallTestBase;
   
-  static OI OperatorInterface;
+  //static OI OperatorInterface;
+	static std::unique_ptr<OI> oi;
 
   void RobotInit() override;
   void RobotPeriodic() override;

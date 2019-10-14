@@ -5,17 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "RunSwerve.h"
-#include "FOSwerveDrive.h"
-#include "ROSwerveDrive.h"
-#include "HallTest.h"
+#include "Commands/RunSwerve.h"
+#include "Subsystems/FOSwerveDrive.h"
+#include "Subsystems/ROSwerveDrive.h"
+#include "Subsystems/HallTest.h"
 #include <OI.h>
 #include <Robot.h>
 
 
 driveSwerve::driveSwerve() {
   
-  frc::XboxController *driverJoystick = Robot::OperatorInterface.getDriverJoystick();
+  frc::XboxController *driverJoystick = Robot::oi.get()->getDriverJoystick();
   // Use Requires() here to declare subsystem dependencies
   // eg. Requires(Robot::chassis.get());
   
@@ -30,7 +30,7 @@ void driveSwerve::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void driveSwerve::Execute() {
 
-  Robot::FOSwerveBase.driveSwerve(driverJoystick);
+  Robot::FOSwerveBase.get()->driveSwerve(driverJoystick);
 
 }
 

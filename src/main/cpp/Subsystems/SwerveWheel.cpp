@@ -4,7 +4,7 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-#include "SwerveWheel.h"
+#include "Subsystems/SwerveWheel.h"
 #include "RobotMap.h"
 #include "PWMTalonSRX.h"
 #include "frc/Encoder.h"

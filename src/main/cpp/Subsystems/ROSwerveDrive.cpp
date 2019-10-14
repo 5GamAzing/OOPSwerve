@@ -5,12 +5,12 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "HallTest.h"
-#include "SwerveWheel.h"
+#include "Subsystems/ROSwerveDrive.h"
+#include "Subsystems/SwerveWheel.h"
 
 
 
-HallTest::HallTest()  : Subsystem("HallTest") {
+ROSwerveDrive::ROSwerveDrive()  : Subsystem("ROSwerveDrive") {
 
   frontLeft = new SwerveWheel(0);
   frontRight = new SwerveWheel(1);
@@ -23,7 +23,7 @@ HallTest::HallTest()  : Subsystem("HallTest") {
 
 }
 
-void HallTest::InitDefaultCommand() {
+void ROSwerveDrive::InitDefaultCommand() {
   // Set the default command for a subsystem here.
   // SetDefaultCommand(new MySpecialCommand());
 }

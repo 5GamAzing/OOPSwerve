@@ -10,22 +10,30 @@
 #include <frc/commands/Scheduler.h>
 
 #include "OI.h"
-#include "SwerveWheel.h"
-#include "FOSwerveDrive.h"
-#include "ROSwerveDrive.h"
-#include "HallTest.h"
+#include "Subsystems/SwerveWheel.h"
+#include "Subsystems/FOSwerveDrive.h"
+#include "Subsystems/ROSwerveDrive.h"
+#include "Subsystems/HallTest.h"
 #include "Robot.h"
 
+std::shared_ptr<FOSwerveDrive> Robot::FOSwerveBase;
+std::shared_ptr<ROSwerveDrive> Robot::ROSwerveBase;
+std::shared_ptr<HallTest> Robot::HallTestBase;
+std::unique_ptr<OI> Robot::oi;
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
   
-  Robot::FOSwerveBase = FOSwerveDrive();
+  /*Robot::FOSwerveBase = FOSwerveDrive();
   Robot::ROSwerveBase = ROSwerveDrive();
   Robot::HallTestBase = HallTest();
-  Robot::OperatorInterface = OI();
+  Robot::OperatorInterface = OI();*/
+  FOSwerveBase.reset(new FOSwerveDrive());
+  ROSwerveBase.reset(new ROSwerveDrive());
+  HallTestBase.reset(new HallTest());
+  oi.reset(new OI());
   
 }
 
