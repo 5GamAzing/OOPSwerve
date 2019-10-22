@@ -26,6 +26,30 @@ HallTest::HallTest()  : Subsystem("HallTest") {
 void HallTest::InitDefaultCommand() {
   // Set the default command for a subsystem here.
   // SetDefaultCommand(new MySpecialCommand());
+  //SetDefaultCommand(new RunSwerve());
+}
+
+void HallTest::driveSwerve(frc::XboxController *driverJoystick) {
+  if ((*driverJoystick).GetAButton() == 1) {
+    frontLeft->turnWheel360(90);
+  }
+  if ((*driverJoystick).GetBButton() == 1) {
+    frontLeft->turnWheel360(-90);
+  }
+  if ((*driverJoystick).GetXButton() == 1) {
+    frontRight->setSpeed(0.5);
+  }
+  else if ((*driverJoystick).GetYButton() == 1) {
+    frontRight->setSpeed(-0.5);
+  }
+  else {
+    frontRight->setSpeed(0);
+  }
+  /*(*flTurn).Set(0.2*20000/25849);
+  (*frTurn).Set(0.2*20000/9635);
+  (*brTurn).Set(0.2*20000/19622);
+  (*blTurn).Set(0.2*20000/27311);*/
+  //printf("%d %d %d %d\n", (*flHall).Get(), (*frHall).Get(), (*brHall).Get(), (*blHall).Get());
 }
 
 // Put methods for controlling this subsystem

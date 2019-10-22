@@ -7,11 +7,12 @@
 
 #pragma once
 #include <frc/XboxController.h>
+#include "frc/commands/Subsystem.h"
 #include <frc/commands/Command.h>
 
-class driveSwerve : public frc::Command {
+class RunSwerve : public frc::Command {
  public:
-  driveSwerve();
+  RunSwerve();
   void Initialize() override;
   void Execute() override;
   bool IsFinished() override;
@@ -19,5 +20,5 @@ class driveSwerve : public frc::Command {
   void Interrupted() override;
 
 private:
-    frc::XboxController *driverJoystick;
+    //frc::XboxController *driverJoystick;
 };

@@ -6,23 +6,18 @@
 /*----------------------------------------------------------------------------*/
 
 #include "OI.h"
+#include <frc/XboxController.h>
+#include "Commands/RunSwerve.h"
 
-OI::OI() : Subsystem("OI") {
-
-  driverJoystick = new frc::XboxController(0);
-  operatorJoystick = new frc::XboxController(1);
-
-  //left rotation, polar coordinates
-
-
-
-
+OI::OI() {
+    driverJoyStick.reset(new frc::XboxController(0));
+    operatorJoyStick.reset(new frc::XboxController(1));
 }
 
-void OI::InitDefaultCommand() {
-  // Set the default command for a subsystem here.
-  // SetDefaultCommand(new MySpecialCommand());
+std::shared_ptr<frc::XboxController> OI::getDriverJoyStick() {
+   return driverJoyStick;
 }
 
-// Put methods for controlling this subsystem
-// here. Call these from Commands.
+std::shared_ptr<frc::XboxController> OI::getOperatorJoyStick() {
+   return operatorJoyStick;
+}

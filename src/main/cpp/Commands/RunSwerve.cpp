@@ -13,33 +13,34 @@
 #include <Robot.h>
 
 
-driveSwerve::driveSwerve() {
+RunSwerve::RunSwerve() : frc::Command() {
   
-  frc::XboxController *driverJoystick = Robot::oi.get()->getDriverJoystick();
   // Use Requires() here to declare subsystem dependencies
   // eg. Requires(Robot::chassis.get());
   
-  Requires(Robot::FOSwerveBase.get());
-  Requires(Robot::ROSwerveBase.get());
+  //Requires(Robot::FOSwerveBase.get());
+  //Requires(Robot::ROSwerveBase.get());
   Requires(Robot::HallTestBase.get());
+  SetRunWhenDisabled(false);
 }
 
 // Called just before this Command runs the first time
-void driveSwerve::Initialize() {}
+void RunSwerve::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void driveSwerve::Execute() {
+void RunSwerve::Execute() {
 
-  Robot::FOSwerveBase.get()->driveSwerve(driverJoystick);
+  frc::XboxController *driverJoystick = Robot::oi.get()->getDriverJoyStick().get();
+  Robot::HallTestBase.get()->driveSwerve(driverJoystick);
 
 }
 
 // Make this return true when this Command no longer needs to run execute()
-bool driveSwerve::IsFinished() { return false; }
+bool RunSwerve::IsFinished() { return false; }
 
 // Called once after isFinished returns true
-void driveSwerve::End() {}
+void RunSwerve::End() {}
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
-void driveSwerve::Interrupted() {}
+void RunSwerve::Interrupted() {}
