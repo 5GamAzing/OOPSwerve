@@ -10,9 +10,9 @@
 #include "frc/commands/Subsystem.h"
 #include <frc/commands/Command.h>
 
-class RunSwerve : public frc::Command {
+class RunSwerveHall : public frc::Command {
  public:
-  RunSwerve();
+  RunSwerveHall();
   void Initialize() override;
   void Execute() override;
   bool IsFinished() override;

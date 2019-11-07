@@ -7,7 +7,7 @@
 
 #include "Subsystems/FOSwerveDrive.h"
 #include "Subsystems/SwerveWheel.h"
-
+#include "../Commands/RunSwerveFO.cpp"
 
 
 FOSwerveDrive::FOSwerveDrive()  : Subsystem("FOSwerveDrive") {
@@ -188,6 +188,7 @@ void FOSwerveDrive::driveSwerve(frc::XboxController *driverJoystick, int mode){
 void FOSwerveDrive::InitDefaultCommand() {
   // Set the default command for a subsystem here.
   // SetDefaultCommand(new MySpecialCommand());
+    SetDefaultCommand(new RunSwerveFO());
 }
 
 // Put methods for controlling this subsystem

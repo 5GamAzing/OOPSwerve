@@ -7,7 +7,7 @@
 
 #include "Subsystems/HallTest.h"
 #include "Subsystems/SwerveWheel.h"
-
+#include "../Commands/RunSwerveHall.cpp"
 
 
 HallTest::HallTest()  : Subsystem("HallTest") {
@@ -26,7 +26,7 @@ HallTest::HallTest()  : Subsystem("HallTest") {
 void HallTest::InitDefaultCommand() {
   // Set the default command for a subsystem here.
   // SetDefaultCommand(new MySpecialCommand());
-  //SetDefaultCommand(new RunSwerve());
+  SetDefaultCommand(new RunSwerveHall());
 }
 
 void HallTest::driveSwerve(frc::XboxController *driverJoystick) {

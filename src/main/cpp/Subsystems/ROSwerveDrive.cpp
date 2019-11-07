@@ -7,6 +7,7 @@
 
 #include "Subsystems/ROSwerveDrive.h"
 #include "Subsystems/SwerveWheel.h"
+#include "../Commands/RunSwerveRO.cpp"
 
 
 
@@ -26,6 +27,7 @@ ROSwerveDrive::ROSwerveDrive()  : Subsystem("ROSwerveDrive") {
 void ROSwerveDrive::InitDefaultCommand() {
   // Set the default command for a subsystem here.
   // SetDefaultCommand(new MySpecialCommand());
+  SetDefaultCommand(new RunSwerveRO());
 }
 
 void ROSwerveDrive::driveSwerve(frc::XboxController *driverJoystick){

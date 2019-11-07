@@ -5,21 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "OI.h"
+#pragma once
 #include <frc/XboxController.h>
-#include "Commands/RunSwerveHall.h"
-#include "Commands/RunSwerveFO.h"
-#include "Commands/RunSwerveRO.h"
+#include "frc/commands/Subsystem.h"
+#include <frc/commands/Command.h>
 
-OI::OI() {
-    driverJoyStick.reset(new frc::XboxController(0));
-    operatorJoyStick.reset(new frc::XboxController(1));
-}
+class RunSwerveFO : public frc::Command {
+ public:
+  RunSwerveFO();
+  void Initialize() override;
+  void Execute() override;
+  bool IsFinished() override;
+  void End() override;
+  void Interrupted() override;
 
-std::shared_ptr<frc::XboxController> OI::getDriverJoyStick() {
-   return driverJoyStick;
-}
-
-std::shared_ptr<frc::XboxController> OI::getOperatorJoyStick() {
-   return operatorJoyStick;
-}
+private:
+    //frc::XboxController *driverJoystick;
+};
