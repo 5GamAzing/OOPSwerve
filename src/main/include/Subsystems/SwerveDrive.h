@@ -6,17 +6,19 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#pragma once
+#ifndef SWERVEDRIVE_H
+#define SWERVEDRIVE_H
 
 #include <Subsystems/SwerveWheel.h>
 #include <frc/XboxController.h>
 #include <frc/commands/Subsystem.h>
 #include <frc/drive/Vector2d.h>
 #include <math.h>
+#include "frc/WPILib.h"
 #include "RobotMap.h"
 
 
-class FOSwerveDrive : public frc::Subsystem {
+class SwerveDrive : public frc::Subsystem {
  private:
   float SPEED = 0.5;
   int ENCODERS = 360;
@@ -25,6 +27,8 @@ class FOSwerveDrive : public frc::Subsystem {
   SwerveWheel *frontRight;
   SwerveWheel *backLeft;
   SwerveWheel *backRight;
+
+  frc::SerialPort *serial;
 
   float angleCalc(float x, float y);
 
@@ -36,13 +40,17 @@ class FOSwerveDrive : public frc::Subsystem {
 
 
  public:
-  FOSwerveDrive();
+  SwerveDrive();
 
   
-//takes joystick values and determines what angle you want the wheels to be turned
-  void driveSwerve(frc::XboxController *driverJoystick, int mode = 0);
+  //takes joystick values and determines what angle you want the wheels to be turned
+  void driveSwerveFO(frc::XboxController *driverJoystick, int mode = 0);
+  void driveSwerveRO(frc::XboxController *driverJoystick);
+  void testHall(frc::XboxController *driverJoystick);
     
   void InitDefaultCommand() override;
 
-  FOSwerveDrive* get() { return this; }
+  SwerveDrive* get() { return this; }
 };
+
+#endif

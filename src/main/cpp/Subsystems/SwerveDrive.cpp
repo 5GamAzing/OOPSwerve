@@ -5,29 +5,32 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Subsystems/FOSwerveDrive.h"
+#include "Subsystems/SwerveDrive.h"
 #include "Subsystems/SwerveWheel.h"
-#include "../Commands/RunSwerveFO.cpp"
+#include <math.h>
+#include "../../include/Commands/RunSwerve.h"
 
 
-FOSwerveDrive::FOSwerveDrive()  : Subsystem("FOSwerveDrive") {
+SwerveDrive::SwerveDrive()  : Subsystem("SwerveDrive") {
 
-  frontLeft = new SwerveWheel(0);
-  frontRight = new SwerveWheel(1);
-  backLeft = new SwerveWheel(2);
-  backRight = new SwerveWheel(3);
+    frontLeft = new SwerveWheel(0);
+    AddChild("front left", frontLeft);
+    frontRight = new SwerveWheel(1);
+    AddChild("front right", frontRight);
+    backLeft = new SwerveWheel(2);
+    AddChild("back left", backLeft);
+    backRight = new SwerveWheel(3);
+    AddChild("back right", backRight);
 
-  
-
-
-
+    serial = new frc::SerialPort(GYRO_SERIAL_BAUDRATE, GYRO_SERIAL_PORT);
+    serial->EnableTermination();
 }
 
-float FOSwerveDrive::distCalc(float x, float y) {
+float SwerveDrive::distCalc(float x, float y) {
   return sqrt(pow(x, 2) + pow(y, 2));
 }
 
-float FOSwerveDrive::angleCalc(float x, float y) {
+float SwerveDrive::angleCalc(float x, float y) {
   float angle;
   if (x == 0 && y == 0)
       return -1;
@@ -48,14 +51,32 @@ float FOSwerveDrive::angleCalc(float x, float y) {
   return angle;
 }
 
-void FOSwerveDrive::driveSwerve(frc::XboxController *driverJoystick, int mode){
+void SwerveDrive::driveSwerveFO(frc::XboxController *driverJoystick, int mode) {
     //Define variables
     int targetEncoder[4];
     float targetSpeed[4], turnMagnitude[4];
     float vector1[2], vector2[4][2], finalVector[4][2];
+    char rawOffset[10] = {0};
+    int offset;
+    bool negativeOffset = false;
     frc::Vector2d *driveVector = new frc::Vector2d;
     frc::Vector2d *turnVector = new frc::Vector2d;
     frc::Vector2d *sumVector = new frc::Vector2d;
+
+    //Convert offset from string to float
+    serial->Read(rawOffset, 10);
+    for (int i = 0; i < 10; i++) {
+        if (rawOffset[i] == '.') {
+            break;
+        }
+        else if (rawOffset[i] == '-') {
+            negativeOffset = true;
+        }
+        else {
+            offset *= 10;
+            offset += rawOffset[i] - '0';
+        }
+    }
 
     //Calculate joystick angles
     float lAngle = angleCalc(driverJoystick->GetX(LHAND), 0-driverJoystick->GetY(LHAND));
@@ -162,6 +183,7 @@ void FOSwerveDrive::driveSwerve(frc::XboxController *driverJoystick, int mode){
     if (mode == 5) {
       driveVector->x = driverJoystick->GetX(RHAND);
       driveVector->y = 0 - driverJoystick->GetY(RHAND);
+      driveVector->Rotate(360-offset); //Factor in gyroscope value (subtract from 360 to go from counterclockwise to clockwise)
       turnVector->x = cosf((driverJoystick->GetX(LHAND) * 45) + 45) * 57.2958;
       turnVector->y = sinf((driverJoystick->GetX(LHAND) * 45) + 45) * 57.2958;
       for (int i = 0; i < 4; i++) { //For each wheel:
@@ -181,15 +203,86 @@ void FOSwerveDrive::driveSwerve(frc::XboxController *driverJoystick, int mode){
     backRight->setSpeed(targetSpeed[2]);
     backLeft->setSpeed(targetSpeed[3]);
     printf("Running!\n");
-    printf("%d\n", lAngle);
+    printf("%f\n", lAngle);
     printf("%d %d %d %d\n", targetEncoder[0], targetEncoder[1], targetEncoder[2], targetEncoder[3]);
 }
 
-void FOSwerveDrive::InitDefaultCommand() {
-  // Set the default command for a subsystem here.
-  // SetDefaultCommand(new MySpecialCommand());
-    SetDefaultCommand(new RunSwerveFO());
+void SwerveDrive::driveSwerveRO(frc::XboxController *driverJoystick) {
+    //The left joystick determines the speed and if the wheels 
+    //  should move forward or backward.
+    double xvalue = driverJoystick-> GetRawAxis(LEFT_X);
+    double yvalue = driverJoystick-> GetRawAxis(LEFT_Y);    
+    
+    //first start moving the wheels either forward or backward
+    //  depending on the magnitude & direction of the joystick
+    double magnitude = sqrt(xvalue*xvalue + yvalue*yvalue);
+    
+    //speed is always the magnitude of the left joystick, but depends what quadrant it's in
+    //if the angle is from 0 to -pi, move backwards
+    double angleRad = atan2(yvalue, xvalue);
+    
+    if (angleRad<0){
+      frontLeft->setSpeed(-magnitude);
+      frontRight->setSpeed(-magnitude);
+      backLeft->setSpeed(-magnitude);
+      backRight->setSpeed(-magnitude);
+    }
+    else{
+      frontLeft->setSpeed(magnitude);
+      frontRight->setSpeed(magnitude);
+      backLeft->setSpeed(magnitude);
+      backRight->setSpeed(magnitude);
+    }
+
+  
+    //figure out the direction to spin the wheels using the 
+    //  left joystick and use the right joystick to determine
+    //  if the robot chassis should also spin 
+ 
+    double angleDeg = angleRad* 180/3.14159265;
+    double spinValue = driverJoystick->GetRawAxis(RIGHT_X); 
+    double spinAngle = spinValue*90;
+    //the spinValue math determines how much to spin the robot proportional to the right joystick
+    //it is always a fraction of  degrees towards the turn for the front motors, away from the turn for the back
+    //this if statement is so that it is more efficient and the wheel never turns more than 180 degrees
+    if(angleDeg<0){
+      angleDeg= angleDeg+180;
+    }
+    else{
+     angleDeg=angleDeg;
+    }
+    frontLeft->turnWheel(angleDeg+ spinAngle);
+    frontRight->turnWheel(angleDeg + spinAngle);
+    backLeft->turnWheel(angleDeg - spinAngle);
+    backRight->turnWheel(angleDeg - spinAngle);
 }
 
-// Put methods for controlling this subsystem
-// here. Call these from Commands.
+
+void SwerveDrive::testHall(frc::XboxController *driverJoystick) {
+  if ((*driverJoystick).GetAButton() == 1) {
+    frontLeft->turnWheel360(90);
+  }
+  if ((*driverJoystick).GetBButton() == 1) {
+    frontLeft->turnWheel360(-90);
+  }
+  if ((*driverJoystick).GetXButton() == 1) {
+    frontRight->setSpeed(0.5);
+  }
+  else if ((*driverJoystick).GetYButton() == 1) {
+    frontRight->setSpeed(-0.5);
+  }
+  else {
+    frontRight->setSpeed(0);
+  }
+  //(*flTurn).Set(0.2*20000/25849);
+  //(*frTurn).Set(0.2*20000/9635);
+  //(*brTurn).Set(0.2*20000/19622);
+  //(*blTurn).Set(0.2*20000/27311);
+  //printf("%d %d %d %d\n", (*flHall).Get(), (*frHall).Get(), (*brHall).Get(), (*blHall).Get());
+}
+
+void SwerveDrive::InitDefaultCommand() {
+  // Set the default command for a subsystem here.
+  // SetDefaultCommand(new MySpecialCommand());
+    SetDefaultCommand(new RunSwerve());
+}

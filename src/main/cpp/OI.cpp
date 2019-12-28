@@ -5,15 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/XboxController.h>
+#include "Commands/AutonomousCommand.h"
 #include "OI.h"
 #include <frc/XboxController.h>
-#include "Commands/RunSwerveHall.h"
-#include "Commands/RunSwerveFO.h"
-#include "Commands/RunSwerveRO.h"
 
 OI::OI() {
-    driverJoyStick.reset(new frc::XboxController(0));
-    operatorJoyStick.reset(new frc::XboxController(1));
+   driverJoyStick.reset(new frc::XboxController(0));
+   operatorJoyStick.reset(new frc::XboxController(1));
 }
 
 std::shared_ptr<frc::XboxController> OI::getDriverJoyStick() {

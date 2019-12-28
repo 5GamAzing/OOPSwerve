@@ -8,6 +8,8 @@
 #pragma once
 
 #include <frc/commands/Subsystem.h>
+#include <frc/SerialPort.h>
+
 //these are static variables that are the indexes for every real thing on the robot
 //joystick
 const int DRIVER_JOYSTICK = 0;
@@ -22,6 +24,10 @@ const int RIGHT_X = 4;
 #define LHAND frc::GenericHID::kLeftHand
 #define RHAND frc::GenericHID::kRightHand
 
+//swerve mode
+const int SWERVE_MODE = 0; //0 = Field Oriented, 1 = Robot Oriented, 2 = HallTest
+const int FO_MODE = 5; //0 = all wheels together, 1 = 1 joystick control (no turns), 2 = 90 deg turns, 3 = variable turns, 4 = custom vector math, 5 = WPILIB vector math w/ gyro
+
 //drive motors
 const int FRONT_LEFT_DRIVE = 8;
 const int FRONT_LEFT_SPIN = 1;
@@ -33,14 +39,13 @@ const int BACK_RIGHT_DRIVE=7;
 const int BACK_RIGHT_SPIN=6;
 
 //encoders
-const int FL_ENCODER_0 = 0;
-const int FL_ENCODER_1 = 1;
-const int FR_ENCODER_0 = 6;
-const int FR_ENCODER_1 = 7;
-const int BL_ENCODER_0 = 2;
-const int BL_ENCODER_1 = 3;
-const int BR_ENCODER_0 = 4;
-const int BR_ENCODER_1 = 5;
+const int FL_ANALOG = 0;
+const int FR_ANALOG = 1;
+const int BL_ANALOG = 2;
+const int BR_ANALOG = 3;
+
+const int GYRO_SERIAL_BAUDRATE = 115200;
+const frc::SerialPort::Port GYRO_SERIAL_PORT = frc::SerialPort::kUSB;
 
 class RobotMap : public frc::Subsystem {
  private:

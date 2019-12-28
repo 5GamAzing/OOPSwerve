@@ -5,14 +5,16 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#pragma once
+#ifndef _ROBOT_H
+#define _ROBOT_H
 
 #include <string>
-#include "Subsystems/FOSwerveDrive.h"
-#include "Subsystems/ROSwerveDrive.h"
-#include "Subsystems/HallTest.h"
+#include "Subsystems/SwerveDrive.h"
 #include "OI.h"
-
+#include "frc/WPILib.h"
+#include "frc/commands/Command.h"
+#include "frc/livewindow/LiveWindow.h"
+#include "Commands/AutonomousCommand.h"
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
 
@@ -24,20 +26,18 @@ class Robot : public frc::TimedRobot {
   /*static FOSwerveDrive FOSwerveBase;
   static ROSwerveDrive ROSwerveBase;
   static HallTest HallTestBase;*/
-  static std::shared_ptr<FOSwerveDrive> FOSwerveBase;
-  static std::shared_ptr<ROSwerveDrive> ROSwerveBase;
-  static std::shared_ptr<HallTest> HallTestBase;
+  static std::shared_ptr<SwerveDrive> SwerveBase;
   
   //static OI OperatorInterface;
 	static std::unique_ptr<OI> oi;
 
-  void RobotInit() override;
-  void RobotPeriodic() override;
-  void AutonomousInit() override;
-  void AutonomousPeriodic() override;
-  void TeleopInit() override;
-  void TeleopPeriodic() override;
-  void TestPeriodic() override;
+	void RobotInit() override;
+	void DisabledInit() override;
+	void DisabledPeriodic() override;
+	void AutonomousInit() override;
+	void AutonomousPeriodic() override;
+	void TeleopInit() override;
+	void TeleopPeriodic() override;
 
 
  private:
@@ -45,6 +45,6 @@ class Robot : public frc::TimedRobot {
   const std::string kAutoNameDefault = "Default";
   const std::string kAutoNameCustom = "My Auto";
   std::string m_autoSelected;
-
-  
 };
+
+#endif

@@ -5,24 +5,21 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#pragma once
+#ifndef SWERVEWHEEL_H
+#define SWERVEWHEEL_H
 
 #include <frc/commands/Subsystem.h>
 #include <frc/PWMTalonSRX.h>
 #include <frc/Encoder.h>
 
-static const int BUFFER = 10;
-
 class SwerveWheel : public frc::Subsystem {
  private:
   frc::PWMTalonSRX *swivelMotor;
   frc::PWMTalonSRX *driveMotor;
-  frc::Encoder *driveEncoder;
+  frc::AnalogInput *driveEncoder;
   
   float SPEED = 0.2;
-
-  // It's desirable that everything possible under private except
-  // for methods that implement subsystem capabilities
+  int BUFFER = 10;
 
  public:
   SwerveWheel(int idx);
@@ -35,3 +32,5 @@ class SwerveWheel : public frc::Subsystem {
 
   void InitDefaultCommand() override;
 };
+
+#endif

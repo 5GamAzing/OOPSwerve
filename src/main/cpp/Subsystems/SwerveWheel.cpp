@@ -6,34 +6,32 @@
 /*----------------------------------------------------------------------------*/
 #include "Subsystems/SwerveWheel.h"
 #include "RobotMap.h"
-#include "PWMTalonSRX.h"
-#include "frc/Encoder.h"
+#include <frc/PWMTalonSRX.h>
+#include <frc/AnalogInput.h>
+#include <frc/commands/Subsystem.h>
 
 SwerveWheel::SwerveWheel(int idx) : Subsystem("SwerveWheel") {
+  frc::AnalogInput::SetSampleRate(2600);
 
     if (idx == 0) {
         driveMotor = new frc::PWMTalonSRX(FRONT_LEFT_DRIVE);
         swivelMotor = new frc::PWMTalonSRX(FRONT_LEFT_SPIN);
-        driveEncoder = new frc::Encoder(FL_ENCODER_0,FL_ENCODER_1);
-        driveEncoder->Reset();
+        driveEncoder = new frc::AnalogInput(FL_ANALOG);
     }
     else if (idx == 1) {
         driveMotor = new frc::PWMTalonSRX(FRONT_RIGHT_DRIVE);
         swivelMotor = new frc::PWMTalonSRX(FRONT_RIGHT_SPIN);
-        driveEncoder = new frc::Encoder(FR_ENCODER_0,FR_ENCODER_1);
-        driveEncoder->Reset();
+        driveEncoder = new frc::AnalogInput(FR_ANALOG);
     }
     else if (idx == 2) {
         driveMotor = new frc::PWMTalonSRX(BACK_RIGHT_DRIVE);
         swivelMotor = new frc::PWMTalonSRX(BACK_RIGHT_SPIN);
-        driveEncoder = new frc::Encoder(BR_ENCODER_0,BR_ENCODER_1);
-        driveEncoder->Reset();
+        driveEncoder = new frc::AnalogInput(BR_ANALOG);
     }
     else {
         driveMotor = new frc::PWMTalonSRX(BACK_LEFT_DRIVE);
         swivelMotor = new frc::PWMTalonSRX(BACK_LEFT_SPIN);
-        driveEncoder = new frc::Encoder(BL_ENCODER_0,BL_ENCODER_1);
-        driveEncoder->Reset();
+        driveEncoder = new frc::AnalogInput(BL_ANALOG);
     }
 
 }
@@ -50,14 +48,7 @@ void SwerveWheel::setSpeed(double value){
 }
 
 void SwerveWheel::turnWheel360(int target){
-    if (driveEncoder->Get() >= 360) {
-      driveEncoder->Reset();
-    }
-    else if (driveEncoder->Get() <= -360) {
-      driveEncoder->Reset();
-    }
-    
-    int x = (driveEncoder->Get() + 360) % 360;
+    int x = (driveEncoder->GetValue() + 360) % 360;
     int min = target - 30;
     int max = target + 30;
     int mode;
@@ -85,13 +76,13 @@ void SwerveWheel::turnWheel360(int target){
       swivelMotor->Set(-0.5);
       mode = 4;
     }
-    printf("%d - %d - %d : %d ---- %d\n", min, x, max, mode, driveEncoder->Get());
+    printf("%d - %d - %d : %d ---- %d\n", min, x, max, mode, driveEncoder->GetValue());
 }
 
 void SwerveWheel::turnWheel(int angle){
 
     //endcoder has 360 ticks in one revolution
-    int encoderValue = ((*driveEncoder).Get())%360;
+    int encoderValue = ((*driveEncoder).GetValue())%360;
     int lowTolerance = (angle)-BUFFER;
     int highTolerance = (angle)+BUFFER;
     //double speed = abs(encoderValue-angle)/180*SPEED;

@@ -5,38 +5,51 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Commands/RunSwerveFO.h"
-#include "Subsystems/FOSwerveDrive.h"
+#include "RobotMap.h"
+#include "Commands/RunSwerve.h"
+#include "Subsystems/SwerveDrive.h"
 #include <OI.h>
 #include <Robot.h>
 
 
-RunSwerveFO::RunSwerveFO() : frc::Command() {
+RunSwerve::RunSwerve() : frc::Command() {
   
   // Use Requires() here to declare subsystem dependencies
   // eg. Requires(Robot::chassis.get());
   
-  Requires(Robot::FOSwerveBase.get());
+  Requires(Robot::SwerveBase.get());
   SetRunWhenDisabled(false);
 }
 
 // Called just before this Command runs the first time
-void RunSwerveFO::Initialize() {}
+void RunSwerve::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void RunSwerveFO::Execute() {
+void RunSwerve::Execute() {
 
   frc::XboxController *driverJoystick = Robot::oi.get()->getDriverJoyStick().get();
-  Robot::FOSwerveBase.get()->driveSwerve(driverJoystick);
+  switch(SWERVE_MODE) {
+  case 0:
+    Robot::SwerveBase.get()->driveSwerveFO(driverJoystick, FO_MODE);
+    break;
+  case 1:
+    Robot::SwerveBase.get()->driveSwerveRO(driverJoystick);
+    break;
+  case 2:
+    Robot::SwerveBase.get()->testHall(driverJoystick);
+    break;
+  default:
+    printf("Invalid swerve mode!\n");
+  }
 
 }
 
 // Make this return true when this Command no longer needs to run execute()
-bool RunSwerveFO::IsFinished() { return false; }
+bool RunSwerve::IsFinished() { return false; }
 
 // Called once after isFinished returns true
-void RunSwerveFO::End() {}
+void RunSwerve::End() {}
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
-void RunSwerveFO::Interrupted() {}
+void RunSwerve::Interrupted() {}

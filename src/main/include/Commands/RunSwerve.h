@@ -9,10 +9,11 @@
 #include <frc/XboxController.h>
 #include "frc/commands/Subsystem.h"
 #include <frc/commands/Command.h>
+#include "Robot.h"
 
-class RunSwerveHall : public frc::Command {
+class RunSwerve : public frc::Command {
  public:
-  RunSwerveHall();
+  RunSwerve();
   void Initialize() override;
   void Execute() override;
   bool IsFinished() override;
