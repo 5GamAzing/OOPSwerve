@@ -24,6 +24,7 @@ SwerveDrive::SwerveDrive()  : Subsystem("SwerveDrive") {
 
     serial = new frc::SerialPort(GYRO_SERIAL_BAUDRATE, GYRO_SERIAL_PORT);
     serial->EnableTermination();
+    serial->Write("Start\n");
 }
 
 float SwerveDrive::distCalc(float x, float y) {
