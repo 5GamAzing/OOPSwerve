@@ -65,7 +65,13 @@ void SwerveDrive::driveSwerveFO(frc::XboxController *driverJoystick, int mode) {
     frc::Vector2d *sumVector = new frc::Vector2d;
 
     //Convert offset from string to float
-    serial->Read(rawOffset, 10);
+    serial->Read(rawOffset, 10); //Get initial value
+    while (rawOffset[0] != '~') { //Repeat until you get a valid gyro value
+        while (serial->GetBytesReceived() == 0); //Wait for there to be a gyro value from the arduino
+        while (serial->GetBytesReceived() != 0) { //Get the latest value
+            serial->Read(rawOffset, 10);
+        }
+    }
     for (int i = 0; i < 10; i++) {
         if (rawOffset[i] == '.') {
             break;
